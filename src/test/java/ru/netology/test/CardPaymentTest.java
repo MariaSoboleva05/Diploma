@@ -219,7 +219,7 @@ public class CardPaymentTest {
     }
 
     @Test
-    @DisplayName("Ввод невалидный данных владельца. Ввод на кириллице")
+    @DisplayName("Ввод невалидных данных владельца. Ввод на кириллице")
     void enterNameOnCyrillic() {
         var homePage = new HomePage();
         var cardPaymentPage = homePage.cardPayment();
@@ -229,7 +229,7 @@ public class CardPaymentTest {
     }
 
     @Test
-    @DisplayName("Ввод невалидный данных владельца. Ввод цифр")
+    @DisplayName("Ввод невалидных данных владельца. Ввод цифр")
     void enterNumbersInName() {
         var homePage = new HomePage();
         var cardPaymentPage = homePage.cardPayment();
@@ -239,7 +239,7 @@ public class CardPaymentTest {
     }
 
     @Test
-    @DisplayName("Ввод невалидный данных владельца. Ввод спецсимволов, кроме дефиса и апострофа")
+    @DisplayName("Ввод невалидных данных владельца. Ввод спецсимволов, кроме дефиса и апострофа")
     void enterWrongSymbolsInName() {
         var homePage = new HomePage();
         var cardPaymentPage = homePage.cardPayment();

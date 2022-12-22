@@ -40,7 +40,7 @@ public class DataHelper {
     }
 
     public static String getLongCardNumber() {
-        return ("4444 4444 4444 4441 1");
+        return ("4444 4444 4444 44411");
     }
 
     public static String getRandomCardNumber() {
@@ -72,7 +72,7 @@ public class DataHelper {
     }
 
     public static String getThreeNumbersYear() {
-        return faker.numerify("2##");
+        return faker.numerify("23#");
     }
 
     public static String getOneNumber() { //для месяца, года, CVV
