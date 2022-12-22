@@ -1,12 +1,11 @@
 package ru.netology.test;
 
 
-import org.junit.jupiter.api.BeforeEach;
+import com.codeborne.selenide.logevents.SelenideLogger;
+import io.qameta.allure.selenide.AllureSelenide;
+import org.junit.jupiter.api.*;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import ru.netology.data.DataHelper;
-import ru.netology.page.CardPaymentPage;
 import ru.netology.page.HomePage;
 
 import static com.codeborne.selenide.Selenide.open;
@@ -14,10 +13,19 @@ import static com.codeborne.selenide.Selenide.open;
 
 public class CardPaymentTest {
 
+    @BeforeAll
+    static void setUpAll() {
+        SelenideLogger.addListener("allure", new AllureSelenide());
+    }
+
     @BeforeEach
     void setUp() {
         open("http://localhost:8080");
-       // Configuration.holdBrowserOpen = true;
+    }
+
+    @AfterAll
+    static void tearDownAll() {
+        SelenideLogger.removeListener("allure");
     }
 
     @Test
@@ -293,7 +301,4 @@ public class CardPaymentTest {
         cardPaymentPage.ownerErrorCaption("Поле обязательно для заполнения");
         cardPaymentPage.cvvErrorCaption("Поле обязательно для заполнения");
     }
-
-
-
 }

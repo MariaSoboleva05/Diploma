@@ -1,9 +1,8 @@
 package ru.netology.test;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import com.codeborne.selenide.logevents.SelenideLogger;
+import io.qameta.allure.selenide.AllureSelenide;
+import org.junit.jupiter.api.*;
 import ru.netology.data.DataHelper;
 import ru.netology.data.SQLHelper;
 import ru.netology.page.HomePage;
@@ -12,10 +11,24 @@ import static com.codeborne.selenide.Selenide.open;
 
 public class MySQLTest {
 
+    @BeforeAll
+    static void setUpAll() {
+        SelenideLogger.addListener("allure", new AllureSelenide());
+    }
+
     @BeforeEach
     void setUp() {
         open("http://localhost:8080");
-       // Configuration.holdBrowserOpen = true;
+    }
+
+    @AfterAll
+    public static void setDown() {
+        SQLHelper.cleanTablesMySQL();
+    }
+
+    @AfterAll
+    static void tearDownAll() {
+        SelenideLogger.removeListener("allure");
     }
 
     @Test
@@ -25,8 +38,7 @@ public class MySQLTest {
         var cardPaymentPage = homePage.cardPayment();
         DataHelper.CardInfo cardInfo = DataHelper.getValidDataWithApproveCardNumber1();
         cardPaymentPage.fillCardInfo(cardInfo);
-        cardPaymentPage.successfulPaymentNotification();
-        Assertions.assertEquals("APPROVED", SQLHelper.getCardPaymentStatus());
+        Assertions.assertEquals("APPROVED", SQLHelper.getCardPaymentStatusMySQL());
     }
 
     @Test
@@ -36,8 +48,7 @@ public class MySQLTest {
         var cardPaymentPage = homePage.cardPayment();
         DataHelper.CardInfo cardInfo = DataHelper.getValidDataWithDeclinedCardNumber();
         cardPaymentPage.fillCardInfo(cardInfo);
-        cardPaymentPage.unsuccessfulPaymentNotification();
-        Assertions.assertEquals("DECLINED", SQLHelper.getCardPaymentStatus());
+        Assertions.assertEquals("DECLINED", SQLHelper.getCardPaymentStatusMySQL());
     }
 
     @Test
@@ -47,7 +58,36 @@ public class MySQLTest {
         var cardPaymentPage = homePage.cardPayment();
         DataHelper.CardInfo cardInfo = DataHelper.getDataWithRandomCardNumber();
         cardPaymentPage.fillCardInfo(cardInfo);
-        cardPaymentPage.unsuccessfulPaymentNotification();
-        Assertions.assertNull(SQLHelper.getCardPaymentStatus());
+        Assertions.assertNull(SQLHelper.getCardPaymentStatusMySQL());
+    }
+
+    @Test
+    @DisplayName("Тур в кредит по карте, для которой задан статус APPROVED")
+    void successfulPaymentWithApprovedCardByCredit() {
+        var homePage = new HomePage();
+        var creditPaymentPage = homePage.creditPayment();
+        DataHelper.CardInfo cardInfo = DataHelper.getValidDataWithApproveCardNumber1();
+        creditPaymentPage.fillCardInfo(cardInfo);
+        Assertions.assertEquals("APPROVED", SQLHelper.getCreditPaymentStatusMySQL());
+    }
+
+    @Test
+    @DisplayName("Тур в кредит по карте, для которой задан статус DECLINED")
+    void unsuccessfulPaymentWithDeclinedCardByCredit() {
+        var homePage = new HomePage();
+        var creditPaymentPage = homePage.creditPayment();
+        DataHelper.CardInfo cardInfo = DataHelper.getValidDataWithDeclinedCardNumber();
+        creditPaymentPage.fillCardInfo(cardInfo);
+        Assertions.assertEquals("DECLINED", SQLHelper.getCreditPaymentStatusMySQL());
+    }
+
+    @Test
+    @DisplayName("Тур в кредит по карте, которой нет в базе")
+    void unsuccessfulPaymentWithRandomCardByCredit() {
+        var homePage = new HomePage();
+        var creditPaymentPage = homePage.creditPayment();
+        DataHelper.CardInfo cardInfo = DataHelper.getDataWithRandomCardNumber();
+        creditPaymentPage.fillCardInfo(cardInfo);
+        Assertions.assertNull(SQLHelper.getCreditPaymentStatusMySQL());
     }
 }
