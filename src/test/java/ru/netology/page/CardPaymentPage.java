@@ -35,11 +35,11 @@ public class CardPaymentPage {
     }
 
     public void successfulPaymentNotification() {
-        $(".notification_status_ok").shouldBe(visible, ofSeconds(30));
+        $(".notification_status_ok").shouldBe(visible, ofSeconds(40));
     }
 
     public void unsuccessfulPaymentNotification() {
-        $(".notification_status_error").shouldBe(visible, ofSeconds(30));
+        $(".notification_status_error").shouldBe(visible, ofSeconds(40));
     }
 
     public void cardNumberErrorCaption(String text) {
