@@ -9,58 +9,35 @@ import java.sql.DriverManager;
 public class SQLHelper {
 
     @SneakyThrows
-    public static String getCardPaymentStatusMySQL() {
+    public static String getCardPaymentStatus() {
         var runner = new QueryRunner();
         var status = "SELECT status FROM payment_entity ORDER BY id DESC LIMIT 1;";
-        var conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/app", "app", "pass");
+        var dbUrl = System.getProperty("db.url");
+        var dbUser = System.getProperty("db.username");
+        var dbPass = System.getProperty("db.password");
+        var conn = DriverManager.getConnection(dbUrl, dbUser, dbPass);
         return runner.query(conn, status, new ScalarHandler<>());
     }
-
     @SneakyThrows
-    public static String getCardPaymentStatusPostgresSQL() {
-        var runner = new QueryRunner();
-        var status = "SELECT status FROM payment_entity ORDER BY id DESC LIMIT 1;";
-        var conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/app", "app", "pass");
-        return runner.query(conn, status, new ScalarHandler<>());
-    }
-
-
-    @SneakyThrows
-    public static String getCreditPaymentStatusMySQL() {
+    public static String getCreditPaymentStatus() {
         var runner = new QueryRunner();
         var status = "SELECT status FROM credit_request_entity ORDER BY id DESC LIMIT 1;";
-        var conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/app", "app", "pass");
+        var dbUrl = System.getProperty("db.url");
+        var dbUser = System.getProperty("db.username");
+        var dbPass = System.getProperty("db.password");
+        var conn = DriverManager.getConnection(dbUrl, dbUser, dbPass);
         return runner.query(conn, status, new ScalarHandler<>());
     }
-
     @SneakyThrows
-    public static String getCreditPaymentStatusPostgresSQL() {
-        var runner = new QueryRunner();
-        var status = "SELECT status FROM credit_request_entity ORDER BY id DESC LIMIT 1;";
-        var conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/app", "app", "pass");
-        return runner.query(conn, status, new ScalarHandler<>());
-    }
-
-
-    @SneakyThrows
-    public static void cleanTablesMySQL() {
+    public static void cleanTables() {
         var runner = new QueryRunner();
         var cleanCredit = "DELETE FROM credit_request_entity;";
         var cleanOrder = "DELETE FROM order_entity;";
         var cleanPayment = "DELETE FROM payment_entity;";
-        var conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/app", "app", "pass");
-        runner.update(conn, cleanCredit);
-        runner.update(conn, cleanOrder);
-        runner.update(conn, cleanPayment);
-    }
-
-    @SneakyThrows
-    public static void cleanTablesPostgresSQL() {
-        var runner = new QueryRunner();
-        var cleanCredit = "DELETE FROM credit_request_entity;";
-        var cleanOrder = "DELETE FROM order_entity;";
-        var cleanPayment = "DELETE FROM payment_entity;";
-        var conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/app", "app", "pass");
+        var dbUrl = System.getProperty("db.url");
+        var dbUser = System.getProperty("db.username");
+        var dbPass = System.getProperty("db.password");
+        var conn = DriverManager.getConnection(dbUrl, dbUser, dbPass);
         runner.update(conn, cleanCredit);
         runner.update(conn, cleanOrder);
         runner.update(conn, cleanPayment);

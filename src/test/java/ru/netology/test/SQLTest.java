@@ -9,7 +9,7 @@ import ru.netology.page.HomePage;
 
 import static com.codeborne.selenide.Selenide.open;
 
-public class PostgreSQLTest {
+public class SQLTest {
 
     @BeforeAll
     static void setUpAll() {
@@ -23,7 +23,7 @@ public class PostgreSQLTest {
 
     @AfterAll
     public static void setDown() {
-        SQLHelper.cleanTablesPostgresSQL();
+        SQLHelper.cleanTables();
     }
 
     @AfterAll
@@ -38,7 +38,7 @@ public class PostgreSQLTest {
         var cardPaymentPage = homePage.cardPayment();
         DataHelper.CardInfo cardInfo = DataHelper.getValidDataWithApproveCardNumber1();
         cardPaymentPage.fillCardInfo(cardInfo);
-        Assertions.assertEquals("APPROVED", SQLHelper.getCardPaymentStatusPostgresSQL());
+        Assertions.assertEquals("APPROVED", SQLHelper.getCardPaymentStatus());
     }
 
     @Test
@@ -48,7 +48,7 @@ public class PostgreSQLTest {
         var cardPaymentPage = homePage.cardPayment();
         DataHelper.CardInfo cardInfo = DataHelper.getValidDataWithDeclinedCardNumber();
         cardPaymentPage.fillCardInfo(cardInfo);
-        Assertions.assertEquals("DECLINED", SQLHelper.getCardPaymentStatusPostgresSQL());
+        Assertions.assertEquals("DECLINED", SQLHelper.getCardPaymentStatus());
     }
 
     @Test
@@ -58,7 +58,7 @@ public class PostgreSQLTest {
         var cardPaymentPage = homePage.cardPayment();
         DataHelper.CardInfo cardInfo = DataHelper.getDataWithRandomCardNumber();
         cardPaymentPage.fillCardInfo(cardInfo);
-        Assertions.assertNull(SQLHelper.getCardPaymentStatusPostgresSQL());
+        Assertions.assertNull(SQLHelper.getCardPaymentStatus());
     }
 
     @Test
@@ -68,7 +68,7 @@ public class PostgreSQLTest {
         var creditPaymentPage = homePage.creditPayment();
         DataHelper.CardInfo cardInfo = DataHelper.getValidDataWithApproveCardNumber1();
         creditPaymentPage.fillCardInfo(cardInfo);
-        Assertions.assertEquals("APPROVED", SQLHelper.getCreditPaymentStatusPostgresSQL());
+        Assertions.assertEquals("APPROVED", SQLHelper.getCreditPaymentStatus());
     }
 
     @Test
@@ -78,7 +78,7 @@ public class PostgreSQLTest {
         var creditPaymentPage = homePage.creditPayment();
         DataHelper.CardInfo cardInfo = DataHelper.getValidDataWithDeclinedCardNumber();
         creditPaymentPage.fillCardInfo(cardInfo);
-        Assertions.assertEquals("DECLINED", SQLHelper.getCreditPaymentStatusPostgresSQL());
+        Assertions.assertEquals("DECLINED", SQLHelper.getCreditPaymentStatus());
     }
 
     @Test
@@ -88,6 +88,6 @@ public class PostgreSQLTest {
         var creditPaymentPage = homePage.creditPayment();
         DataHelper.CardInfo cardInfo = DataHelper.getDataWithRandomCardNumber();
         creditPaymentPage.fillCardInfo(cardInfo);
-        Assertions.assertNull(SQLHelper.getCreditPaymentStatusPostgresSQL());
+        Assertions.assertNull(SQLHelper.getCreditPaymentStatus());
     }
 }
